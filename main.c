@@ -1,69 +1,151 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <locale.h>
-int maxdig(int n)
+void n1 (int t[],int q)
 {
-if(n<10){
-        return n;
-}
-else if (n%10>maxdig(n/10))
+for (int i = 0; i < q; i++)
     {
-return n%10;
-}
-else {
-    return (n/10);
-}
-}
+		for (int b = 0; b < i; b++)
+		{
+			if (t[b] == t[i] && b != i)
+			{
+				t[i] = 0;
+			}
+		}
+	}
 
+	for (int i = 1; i < q; i++)
+	{
+		for (int m = 1; m < q; m++)
+		{
+			if (t[m] != 0 && t[m - 1] == 0)
+			{
+				t[m - 1] = t[m];
+				t[m] = 0;
+			}
+		}
+	}
 
-int posled()
+}
+int sort(int a[], int n, int key, int low, int high)
 {
-int n;
-printf("Введите число:");
-scanf("%d",&n);
-if (n==-1) return 0 ;
-else
-return n+posled();
+int mid=(low+high)/2;
 
-}
-
-
-
-
-
-
-
-
-int main()
-{   setlocale(LC_ALL,"RUS");
-    printf("Задание №1-Рекурсивно описать функцию maxdig(N), которая находит наибольшую цифру в десятичной записи неотрицательного целого числа N\n (Задание 3 из 5-го таска)\n");
-    printf("Задание №2-Дана последовательность чисел, завершающаяся числом -1. Найдите сумму всех этих чисел, не используя цикл.\n (Задание 5 из 5-го таска)\n");
-    int p=5,a,b,c=0,s=0;
-    printf("|Для выхода введите 0|\n");
-    printf("\n");
-
-    while(p!=0) //0-условие прекращения работы программы
+if (low>high)
     {
-        printf("Выберите задание:");
-        scanf("%d",&p);
-
-       switch(p)
-      {
-        case 1:
-            printf("Введите любое неотрицательное число(до 9-ти символов):");
-            scanf("%d",&a);
-            printf("Наибольшее число=%d\n",maxdig(a));
-            printf("\n");
-            break;
-        case 2:
-           printf("Сумма чисел равна:%d",posled());
-           printf("\n");
-          break;
-      }
-
+    return -1;
     }
 
+    if (key<a[mid])
+        {
+        return sort(a,n,key, low, mid-1);
+        }
 
+    else if ((key>a[mid]))
+        {
+        return sort(a, n, key, mid+1,high);
+        }
+
+else
+    {
+    return mid;
+    }
+}
+void sum(int a,int b,int t[],int h[],int v[])
+{
+    for(int i=0;i<a;i++)
+    {
+    v[i]=t[i];
+    }
+    for(int i=0;i<b;i++)
+    {
+     v[i+a]=h[i];
+    }
+}
+
+int main()
+{
+    setlocale(LC_ALL,"RUS");
+    int l=5,q,*t,k,g,*h,*v;
+    printf("1.Удалить из массива все повторяющиеся элементы,\n оставив их первые вхождения, т. е. в массиве должны остаться только различные элементы.\n");
+    printf("2.Найти заданный элемент в упорядоченном массиве (бинарный поиск)\n");
+    printf("3.Написать функцию, объединяющую два упорядоченных массива размером m и n в упорядоченный массив размером m+n \n");
+    printf("|Для выхода введите 0|\n");
+    printf("\n");
+    while (l!=0)
+    {
+    printf("Выберите задание:");
+    scanf("%d",&l);
+    switch(l)
+        {
+
+        case 1:
+        printf("\nВведите количество элементов в массиве:");
+	    scanf("%d", &q);
+	    t = (int*)malloc(q * sizeof(int));
+	    printf("Введите элементы массива\n");
+	    for (int i = 0; i < q; i++)
+            {
+		    scanf("%d", &t[i]);
+	        }
+        n1(t,q);
+        printf("после учёта повторений массив приобрёл вид:");
+        for (int i = 0; i < q; i++)
+            {
+	        printf("%d  ", t[i]);
+            }
+        printf("\n\n");
+        break;
+
+        case 2:
+        printf("\nВведите количество элементов в массиве:");
+	    scanf("%d", &q);
+	    t = (int*)malloc(q * sizeof(int));
+	    printf("Введите элементы массива\n");
+	    for (int i = 0; i < q; i++)
+            {
+		    scanf("%d", &t[i]);
+	        }
+	    printf("Число,что хотим найти:");
+	    scanf("%d",&k);
+	    int result = sort(t,q,k,0,q-1);
+	    if(result==-1)
+            {
+            printf("Такого элемента в массиве не существует\n");
+            }
+        else
+            {
+            printf("Индекс элемента: %d\n", result);
+            }
+        printf("\n");
+        break;
+
+        case 3:
+        printf("\nВведите количество элементов в массиве №1:");
+	    scanf("%d", &q);
+	    t = (int*)malloc(q * sizeof(int));
+	    printf("Введите элементы массива №1\n");
+	    for (int i = 0; i < q; i++)
+            {
+		    scanf("%d", &t[i]);
+	        }
+	    printf("\nВведите количество элементов в массиве №2:");
+	    scanf("%d", &g);
+	    h = (int*)malloc(g * sizeof(int));
+	    printf("Введите элементы массива №2\n");
+	    for (int i = 0; i < g; i++)
+            {
+		    scanf("%d", &h[i]);
+	        }
+	    v = (int*)malloc((q+g) * sizeof(int));
+	    sum(q,g,t,h,v);
+        for(int i = 0; i < (q + g); i++)
+            {
+  	        printf(" %d", v[i]);
+            }
+        printf("\n\n");
+	    break;
+        }
+    }
     return 0;
 }
